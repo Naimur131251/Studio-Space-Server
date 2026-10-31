@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import "dotenv/config";
 import cors from "cors";
 
@@ -8,7 +8,6 @@ const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
-
 
 const client = new MongoClient(
   `mongodb://${process.env.DB_URI}:${process.env.DB_PASS}@ac-k03dstd-shard-00-00.kgxk25v.mongodb.net:27017,ac-k03dstd-shard-00-01.kgxk25v.mongodb.net:27017,ac-k03dstd-shard-00-02.kgxk25v.mongodb.net:27017/?ssl=true&replicaSet=atlas-6jagwq-shard-0&authSource=admin`,
@@ -28,7 +27,6 @@ const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
 const studioCollection = db.collection("my-listings");
 
-
 app.post("/add-studios", async (req, res) => {
   const studioData = req.body;
   const result = await studioCollection.insertOne(studioData);
@@ -40,12 +38,26 @@ app.get("/my-listings", async (req, res) => {
   res.send(result);
 });
 
+app.get("/studios/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).send({ message: "Invalid studio ID" });
+
+    const studio = await studioCollection.findOne({ _id: new ObjectId(id) });
+    if (!studio) return res.status(404).send({ message: "Studio not found" });
+
+    res.send(studio);
+  } catch (error) {
+    res.status(500).send({ message: "Failed to fetch studio" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send({
     message: "Server is running",
   });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);
