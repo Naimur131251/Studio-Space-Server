@@ -26,6 +26,7 @@ export async function connectToMongoDB() {
 const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
 const studioCollection = db.collection("my-listings");
+const bookingCollection = db.collection("bookings");
 
 app.post("/add-studios", async (req, res) => {
   const studioData = req.body;
@@ -105,6 +106,55 @@ app.delete("/studios/:id", async (req, res) => {
     res.send({ message: "Studio deleted successfully!" });
   } catch (error) {
     res.status(500).send({ message: "Failed to delete studio" });
+  }
+});
+
+app.post("/bookings", async (req, res) => {
+  try {
+    const {
+      studioId,
+      studioTitle,
+      category,
+      bookingDate,
+      timeSlot,
+      totalAmount,
+      customerEmail,
+    } = req.body;
+
+    if (
+      !studioTitle ||
+      !category ||
+      !bookingDate ||
+      !timeSlot ||
+      !customerEmail ||
+      !Number.isFinite(Number(totalAmount))
+    ) {
+      return res
+        .status(400)
+        .send({ message: "Missing or invalid booking data" });
+    }
+
+    const booking = {
+      studioId,
+      studioTitle,
+      category,
+      bookingDate,
+      timeSlot,
+      totalAmount: Number(totalAmount),
+      customerEmail,
+      status: "Pending",
+      createdAt: new Date(),
+    };
+
+    const result = await bookingCollection.insertOne(booking);
+
+    res.status(201).send({
+      message: "Booking created successfully!",
+      insertedId: result.insertedId,
+    });
+  } catch (error) {
+    console.error("Create booking error:", error);
+    res.status(500).send({ message: "Failed to create booking" });
   }
 });
 
