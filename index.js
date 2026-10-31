@@ -4,7 +4,7 @@ import "dotenv/config";
 import cors from "cors";
 
 const app = express();
-const PORT = 8000;
+const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -27,6 +27,13 @@ export async function connectToMongoDB() {
 const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
 const studioCollection = db.collection("studios");
+
+
+app.post("/studios", async (req, res) => {
+  const studioData = req.body;
+  const result = await studioCollection.insertOne(studioData);
+  res.send(result);
+});
 
 app.get("/", (req, res) => {
   res.send({
