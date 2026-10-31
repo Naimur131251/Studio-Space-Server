@@ -175,6 +175,31 @@ app.get("/my-bookings", async (req, res) => {
   }
 });
 
+app.patch("/bookings/:id/cancel", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!ObjectId.isValid(id))
+      return res.status(400).send({ message: "Invalid booking ID" });
+
+    const result = await bookingCollection.updateOne(
+      { _id: new ObjectId(id), status: "Pending" },
+      { $set: { status: "Cancelled", updatedAt: new Date() } },
+    );
+
+    if (!result.matchedCount) {
+      return res.status(400).send({
+        message: "Booking not found or cannot be cancelled",
+      });
+    }
+
+    res.send({ message: "Booking cancelled successfully!" });
+  } catch (error) {
+    console.error("Cancel booking error:", error);
+    res.status(500).send({ message: "Failed to cancel booking" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send({
     message: "Server is running",
