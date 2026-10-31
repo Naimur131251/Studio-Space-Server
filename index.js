@@ -89,6 +89,25 @@ app.patch("/studios/:id", async (req, res) => {
   }
 });
 
+app.delete("/studios/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).send({ message: "Invalid studio ID" });
+
+    const result = await studioCollection.deleteOne({
+      _id: new ObjectId(id),
+    });
+
+    if (!result.deletedCount)
+      return res.status(404).send({ message: "Studio not found" });
+
+    res.send({ message: "Studio deleted successfully!" });
+  } catch (error) {
+    res.status(500).send({ message: "Failed to delete studio" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send({
     message: "Server is running",
