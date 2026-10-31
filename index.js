@@ -26,12 +26,17 @@ export async function connectToMongoDB() {
 
 const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
-const studioCollection = db.collection("studios");
+const studioCollection = db.collection("my-listings");
 
 
-app.post("/studios", async (req, res) => {
+app.post("/add-studios", async (req, res) => {
   const studioData = req.body;
   const result = await studioCollection.insertOne(studioData);
+  res.send(result);
+});
+
+app.get("/my-listings", async (req, res) => {
+  const result = await studioCollection.find().toArray();
   res.send(result);
 });
 
