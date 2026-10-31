@@ -53,6 +53,42 @@ app.get("/studios/:id", async (req, res) => {
   }
 });
 
+app.patch("/studios/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).send({ message: "Invalid studio ID" });
+
+    const { amenities, ...data } = req.body;
+
+    const result = await studioCollection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          ...data,
+          hourlyRate: Number(data.hourlyRate),
+          securityDeposit: Number(data.securityDeposit),
+          maxCapacity: Number(data.maxCapacity),
+          amenities: Array.isArray(amenities)
+            ? amenities
+            : (amenities || "")
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean),
+          updatedAt: new Date(),
+        },
+      },
+    );
+
+    if (!result.matchedCount)
+      return res.status(404).send({ message: "Studio not found" });
+
+    res.send({ message: "Studio updated successfully!" });
+  } catch (error) {
+    res.status(500).send({ message: "Failed to update studio" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send({
     message: "Server is running",
