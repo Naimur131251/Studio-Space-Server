@@ -2,11 +2,17 @@ import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import "dotenv/config";
 import cors from "cors";
+import { createRemoteJWKSet, jwtVerify } from "jose";
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 const client = new MongoClient(
@@ -25,20 +31,68 @@ export async function connectToMongoDB() {
 
 const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
-const studioCollection = db.collection("my-listings");
+const studioCollection = db.collection("studios");
 const bookingCollection = db.collection("bookings");
 
-app.post("/add-studios", async (req, res) => {
-  const studioData = req.body;
-  const result = await studioCollection.insertOne(studioData);
-  res.send(result);
+// JWKS একবার বাইরে ডিক্লেয়ার করা হলো (Best Practice)
+const JWKS = createRemoteJWKSet(
+  new URL(`${process.env.CLIENT_URL}/api/auth/jwks`),
+);
+
+// JWT Verification Middleware
+const verifyToken = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).send({ message: "Unauthorized access!" });
+  }
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).send({ message: "Unauthorized access!" });
+  }
+
+  try {
+    const { payload } = await jwtVerify(token, JWKS, {
+      issuer: process.env.CLIENT_URL,
+      audience: process.env.CLIENT_URL,
+    });
+    req.user = payload; // ইউজারের তথ্য রিকোয়েস্টে সেভ রাখা হলো
+    next();
+  } catch (error) {
+    console.error("JWT ERROR:", error.code, error.message);
+
+    return res.status(401).send({
+      message: "Unauthorized access - Invalid token!",
+    });
+  }
+};
+
+// 1. Add Studio
+app.post("/add-studios", verifyToken, async (req, res) => {
+  try {
+    const studioData = req.body;
+    const result = await studioCollection.insertOne({
+      ...studioData,
+      createdAt: new Date(),
+    });
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(500).send({ message: "Failed to add studio" });
+  }
 });
 
-app.get("/my-listings", async (req, res) => {
-  const result = await studioCollection.find().toArray();
-  res.send(result);
+// 2. Get My Listings (User specific filter)
+app.get("/my-listings", verifyToken, async (req, res) => {
+  try {
+    const email = req.query.email;
+    const filter = email ? { ownerEmail: email } : {};
+    const result = await studioCollection.find(filter).toArray();
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({ message: "Failed to fetch listings" });
+  }
 });
 
+// 3. Get Single Studio Details
 app.get("/studios/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -54,7 +108,8 @@ app.get("/studios/:id", async (req, res) => {
   }
 });
 
-app.patch("/studios/:id", async (req, res) => {
+// 4. Update Studio
+app.patch("/studios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id))
@@ -90,7 +145,8 @@ app.patch("/studios/:id", async (req, res) => {
   }
 });
 
-app.delete("/studios/:id", async (req, res) => {
+// 5. Delete Studio
+app.delete("/studios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id))
@@ -109,7 +165,8 @@ app.delete("/studios/:id", async (req, res) => {
   }
 });
 
-app.post("/bookings", async (req, res) => {
+// 6. Create Booking (With Double-Booking Prevention)
+app.post("/bookings", verifyToken, async (req, res) => {
   try {
     const {
       studioId,
@@ -118,20 +175,34 @@ app.post("/bookings", async (req, res) => {
       bookingDate,
       timeSlot,
       totalAmount,
-      customerEmail,
     } = req.body;
 
+    // Get email from verified JWT
+    const customerEmail = req.user.email;
+
     if (
-      !studioTitle ||
-      !category ||
+      !studioId ||
       !bookingDate ||
       !timeSlot ||
       !customerEmail ||
       !Number.isFinite(Number(totalAmount))
     ) {
-      return res
-        .status(400)
-        .send({ message: "Missing or invalid booking data" });
+      return res.status(400).send({
+        message: "Missing or invalid booking data",
+      });
+    }
+
+    const existingBooking = await bookingCollection.findOne({
+      studioId,
+      bookingDate,
+      timeSlot,
+      status: { $in: ["Pending", "Confirmed"] },
+    });
+
+    if (existingBooking) {
+      return res.status(400).send({
+        message: "This studio slot is already booked or pending!",
+      });
     }
 
     const booking = {
@@ -154,28 +225,39 @@ app.post("/bookings", async (req, res) => {
     });
   } catch (error) {
     console.error("Create booking error:", error);
-    res.status(500).send({ message: "Failed to create booking" });
+
+    res.status(500).send({
+      message: "Failed to create booking",
+    });
   }
 });
 
-app.get("/my-bookings", async (req, res) => {
+// 7. Get My Bookings (Secured with verifyToken)
+app.get("/my-bookings", verifyToken, async (req, res) => {
   try {
-    const { email } = req.query;
-    const filter = email ? { customerEmail: email } : {};
+    const email = req.user.email;
+
+    console.log("Logged in user:", email);
 
     const bookings = await bookingCollection
-      .find(filter)
+      .find({ customerEmail: email })
       .sort({ createdAt: -1 })
       .toArray();
 
-    res.send(bookings);
+    console.log("Found bookings:", bookings.length);
+
+    res.status(200).send(bookings);
   } catch (error) {
-    console.error("Fetch bookings error:", error);
-    res.status(500).send({ message: "Failed to fetch bookings" });
+    console.error("My bookings error:", error);
+
+    res.status(500).send({
+      message: "Failed to fetch bookings",
+    });
   }
 });
 
-app.patch("/bookings/:id/cancel", async (req, res) => {
+// 8. Cancel Booking (Secured with verifyToken)
+app.patch("/bookings/:id/cancel", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -202,10 +284,10 @@ app.patch("/bookings/:id/cancel", async (req, res) => {
 
 app.get("/", (req, res) => {
   res.send({
-    message: "Server is running",
+    message: "StudioSpace Server is running successfully!",
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running at ${PORT}`);
+  console.log(`Server is running at port ${PORT}`);
 });
