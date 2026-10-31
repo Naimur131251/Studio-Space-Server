@@ -158,6 +158,23 @@ app.post("/bookings", async (req, res) => {
   }
 });
 
+app.get("/my-bookings", async (req, res) => {
+  try {
+    const { email } = req.query;
+    const filter = email ? { customerEmail: email } : {};
+
+    const bookings = await bookingCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    res.send(bookings);
+  } catch (error) {
+    console.error("Fetch bookings error:", error);
+    res.status(500).send({ message: "Failed to fetch bookings" });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send({
     message: "Server is running",
