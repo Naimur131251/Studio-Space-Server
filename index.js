@@ -91,13 +91,18 @@ app.get("/home", async (req, res) => {
 // Get All Studios
 app.get("/studios", async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, search, featured, limit } = req.query;
 
     const filter = {};
 
     // Category filter
     if (category && category !== "All") {
       filter.category = category;
+    }
+
+    // Featured filter
+    if (featured === "true") {
+      filter.featured = true;
     }
 
     // Search filter
@@ -118,10 +123,20 @@ app.get("/studios", async (req, res) => {
       ];
     }
 
-    const studios = await studioCollection
+    let studiosQuery = studioCollection
       .find(filter)
-      .sort({ createdAt: -1 })
-      .toArray();
+      .sort({ rating: -1, createdAt: -1 });
+
+    // Limit filter
+    if (limit) {
+      const parsedLimit = Number(limit);
+
+      if (Number.isInteger(parsedLimit) && parsedLimit > 0) {
+        studiosQuery = studiosQuery.limit(parsedLimit);
+      }
+    }
+
+    const studios = await studiosQuery.toArray();
 
     res.status(200).send({
       success: true,
