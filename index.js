@@ -152,6 +152,31 @@ app.get("/studios", async (req, res) => {
   }
 });
 
+app.get("/studio-categories", async (req, res) => {
+  try {
+    if (!studioCollection) {
+      throw new Error(
+        "Database collection 'categoryCollection' is not initialized",
+      );
+    }
+
+    const categories = await studioCollection.find().toArray();
+
+    res.status(200).json({
+      success: true,
+      categories: categories || [],
+    });
+  } catch (error) {
+    console.error("Database Fetch Error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch categories",
+      categories: [],
+    });
+  }
+});
+
 // 1. Add Studio
 app.post("/add-studios", verifyToken, async (req, res) => {
   try {
