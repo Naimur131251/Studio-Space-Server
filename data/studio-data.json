@@ -1,0 +1,927 @@
+{
+  "slides": [
+    {
+      "id": "slide-1",
+      "image": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1600",
+      "title": "HIGH-PERFORMANCE STUDIOS",
+      "subtitle": "BOOK. CREATE. PRODUCE.",
+      "description": "Discover professional cyc walls, cinema sound stages, and podcast rooms designed for creators."
+    },
+    {
+      "id": "slide-2",
+      "image": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1600",
+      "title": "CINEMATIC SOUND STAGES",
+      "subtitle": "BRING YOUR VISION TO LIFE",
+      "description": "Fully equipped acoustic sound stages with professional lighting rigs and multi-cam setups."
+    },
+    {
+      "id": "slide-3",
+      "image": "https://images.unsplash.com/photo-1593697821252-0c9137d9fc45?auto=format&fit=crop&q=80&w=1600",
+      "title": "CREATIVE PODCAST LOUNGES",
+      "subtitle": "RECORD IN PRISTINE QUALITY",
+      "description": "Acoustically treated podcast recording suites with top-tier mixing consoles and microphones."
+    }
+  ],
+  "studios": [
+    {
+      "_id": "1",
+      "slug": "cyc-wall-studio-pro",
+      "title": "Cyc Wall Studio Pro",
+      "category": "Photo Studio",
+      "hourlyRate": 60,
+      "rating": 4.9,
+      "location": "Downtown LA, Creative District",
+      "securityDeposit": 150,
+      "maxCapacity": 15,
+      "overview": "Premium white cyc wall studio for fashion campaigns, product photography and commercial video shoots.",
+      "imageUrl": "https://images.unsplash.com/photo-1655831068474-00da7930d340?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1655831068474-00da7930d340?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Cyc Wall",
+          "icon": "◻"
+        },
+        {
+          "name": "Lighting Kit",
+          "icon": "💡"
+        },
+        {
+          "name": "Dressing Room",
+          "icon": "🔊"
+        },
+        {
+          "name": "High-Speed WiFi",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Anna Cordero",
+        "email": "host1@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=10"
+      },
+      "featured": true
+    },
+    {
+      "_id": "2",
+      "slug": "cinema-sound-stage-alpha",
+      "title": "Cinema Sound Stage Alpha",
+      "category": "Film Stage",
+      "hourlyRate": 120,
+      "rating": 4.8,
+      "location": "Brooklyn Arts Hub, NY",
+      "securityDeposit": 300,
+      "maxCapacity": 30,
+      "overview": "A flexible cinema stage with acoustic treatment, lighting grids and room for multi-camera productions.",
+      "imageUrl": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Soundproof",
+          "icon": "◻"
+        },
+        {
+          "name": "Lighting Grid",
+          "icon": "💡"
+        },
+        {
+          "name": "Green Room",
+          "icon": "🔊"
+        },
+        {
+          "name": "Power Distribution",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Marcus Reed",
+        "email": "marcus@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=11"
+      },
+      "featured": true
+    },
+    {
+      "_id": "3",
+      "slug": "podcast-lounge-deluxe",
+      "title": "Podcast Lounge Deluxe",
+      "category": "Podcast Lounge",
+      "hourlyRate": 45,
+      "rating": 4.9,
+      "location": "SoHo Media Center, NY",
+      "securityDeposit": 100,
+      "maxCapacity": 6,
+      "overview": "A warm, professionally treated podcast lounge with broadcast microphones and a ready-to-use recording desk.",
+      "imageUrl": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Acoustic Panels",
+          "icon": "◻"
+        },
+        {
+          "name": "Broadcast Mics",
+          "icon": "💡"
+        },
+        {
+          "name": "Mixer",
+          "icon": "🔊"
+        },
+        {
+          "name": "Video Recording",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Olivia Chen",
+        "email": "olivia@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=12"
+      },
+      "featured": true
+    },
+    {
+      "_id": "4",
+      "slug": "acoustic-music-suite",
+      "title": "Acoustic Music Suite",
+      "category": "Music Suite",
+      "hourlyRate": 75,
+      "rating": 4.7,
+      "location": "Nashville Sound Row, TN",
+      "securityDeposit": 180,
+      "maxCapacity": 8,
+      "overview": "A comfortable music suite for vocal sessions, demos, rehearsals and independent recording projects.",
+      "imageUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Vocal Booth",
+          "icon": "◻"
+        },
+        {
+          "name": "Studio Monitors",
+          "icon": "💡"
+        },
+        {
+          "name": "Keyboard",
+          "icon": "🔊"
+        },
+        {
+          "name": "Soundproof",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Ethan Brooks",
+        "email": "ethan@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=13"
+      },
+      "featured": true
+    },
+    {
+      "_id": "5",
+      "slug": "minimalist-natural-light-loft",
+      "title": "Minimalist Natural Light Loft",
+      "category": "Photo Studio",
+      "hourlyRate": 50,
+      "rating": 4.6,
+      "location": "Silver Lake, CA",
+      "securityDeposit": 120,
+      "maxCapacity": 12,
+      "overview": "A bright loft with large windows, neutral textures and flexible corners for portraits and lifestyle content.",
+      "imageUrl": "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Natural Light",
+          "icon": "◻"
+        },
+        {
+          "name": "Backdrop Stand",
+          "icon": "💡"
+        },
+        {
+          "name": "Makeup Table",
+          "icon": "🔊"
+        },
+        {
+          "name": "WiFi",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Mia Parker",
+        "email": "mia@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=14"
+      },
+      "featured": true
+    },
+    {
+      "_id": "6",
+      "slug": "indie-band-jam-and-recording-room",
+      "title": "Indie Band Jam & Recording Room",
+      "category": "Music Suite",
+      "hourlyRate": 65,
+      "rating": 4.9,
+      "location": "Austin Music District, TX",
+      "securityDeposit": 160,
+      "maxCapacity": 10,
+      "overview": "An energetic rehearsal and recording room with a full backline for bands, songwriters and producers.",
+      "imageUrl": "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Drum Kit",
+          "icon": "◻"
+        },
+        {
+          "name": "Guitar Amps",
+          "icon": "💡"
+        },
+        {
+          "name": "Mixer",
+          "icon": "🔊"
+        },
+        {
+          "name": "Soundproof",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Noah Williams",
+        "email": "noah@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=15"
+      },
+      "featured": true
+    },
+    {
+      "_id": "7",
+      "slug": "industrial-product-studio",
+      "title": "Industrial Product Studio",
+      "category": "Photo Studio",
+      "hourlyRate": 55,
+      "rating": 4.7,
+      "location": "Arts District, Chicago, IL",
+      "securityDeposit": 130,
+      "maxCapacity": 10,
+      "overview": "An industrial-style product studio with modular surfaces and controlled lighting for catalog and campaign work.",
+      "imageUrl": "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Product Table",
+          "icon": "◻"
+        },
+        {
+          "name": "Softboxes",
+          "icon": "💡"
+        },
+        {
+          "name": "Light Tent",
+          "icon": "🔊"
+        },
+        {
+          "name": "Props",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Sophia Turner",
+        "email": "sophia@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=16"
+      },
+      "featured": false
+    },
+    {
+      "_id": "8",
+      "slug": "virtual-production-stage",
+      "title": "Virtual Production Stage",
+      "category": "Film Stage",
+      "hourlyRate": 180,
+      "rating": 4.9,
+      "location": "Queens Production Park, NY",
+      "securityDeposit": 500,
+      "maxCapacity": 40,
+      "overview": "A large production stage designed for virtual shoots, commercial sets and complex visual storytelling.",
+      "imageUrl": "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "LED Wall",
+          "icon": "◻"
+        },
+        {
+          "name": "Camera Rig",
+          "icon": "💡"
+        },
+        {
+          "name": "Lighting Grid",
+          "icon": "🔊"
+        },
+        {
+          "name": "Green Room",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Daniel Foster",
+        "email": "daniel@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=17"
+      },
+      "featured": false
+    },
+    {
+      "_id": "9",
+      "slug": "creator-podcast-booth",
+      "title": "Creator Podcast Booth",
+      "category": "Podcast Lounge",
+      "hourlyRate": 35,
+      "rating": 4.8,
+      "location": "Mission District, San Francisco, CA",
+      "securityDeposit": 80,
+      "maxCapacity": 4,
+      "overview": "A compact creator booth for solo podcasts, interviews and remote guest recording.",
+      "imageUrl": "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "USB Microphones",
+          "icon": "◻"
+        },
+        {
+          "name": "Acoustic Foam",
+          "icon": "💡"
+        },
+        {
+          "name": "Headphones",
+          "icon": "🔊"
+        },
+        {
+          "name": "Ring Light",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Ava Mitchell",
+        "email": "ava@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=18"
+      },
+      "featured": false
+    },
+    {
+      "_id": "10",
+      "slug": "grand-piano-recording-room",
+      "title": "Grand Piano Recording Room",
+      "category": "Music Suite",
+      "hourlyRate": 90,
+      "rating": 5.0,
+      "location": "Music Square, Nashville, TN",
+      "securityDeposit": 220,
+      "maxCapacity": 7,
+      "overview": "An intimate recording room centered around a concert grand piano and detailed acoustic monitoring.",
+      "imageUrl": "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Grand Piano",
+          "icon": "◻"
+        },
+        {
+          "name": "Vocal Mic",
+          "icon": "💡"
+        },
+        {
+          "name": "Studio Monitors",
+          "icon": "🔊"
+        },
+        {
+          "name": "Isolation Booth",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Lucas Bennett",
+        "email": "lucas@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=19"
+      },
+      "featured": false
+    },
+    {
+      "_id": "11",
+      "slug": "creative-workshop-loft",
+      "title": "Creative Workshop Loft",
+      "category": "Workshop",
+      "hourlyRate": 40,
+      "rating": 4.6,
+      "location": "East Austin, TX",
+      "securityDeposit": 100,
+      "maxCapacity": 18,
+      "overview": "A flexible workshop loft for creator meetups, hands-on classes, small launches and collaborative sessions.",
+      "imageUrl": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Workshop Tables",
+          "icon": "◻"
+        },
+        {
+          "name": "Projector",
+          "icon": "💡"
+        },
+        {
+          "name": "Whiteboard",
+          "icon": "🔊"
+        },
+        {
+          "name": "Coffee Station",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Grace Kim",
+        "email": "grace@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=20"
+      },
+      "featured": false
+    },
+    {
+      "_id": "12",
+      "slug": "fashion-editorial-studio",
+      "title": "Fashion Editorial Studio",
+      "category": "Photo Studio",
+      "hourlyRate": 85,
+      "rating": 4.8,
+      "location": "West Hollywood, CA",
+      "securityDeposit": 200,
+      "maxCapacity": 14,
+      "overview": "A polished editorial studio with premium backdrops, styling space and adaptable lighting for fashion teams.",
+      "imageUrl": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Cyclorama",
+          "icon": "◻"
+        },
+        {
+          "name": "Styling Rack",
+          "icon": "💡"
+        },
+        {
+          "name": "Makeup Stations",
+          "icon": "🔊"
+        },
+        {
+          "name": "Flash System",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Isabella Moore",
+        "email": "isabella@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=21"
+      },
+      "featured": false
+    },
+    {
+      "_id": "13",
+      "slug": "live-session-stage",
+      "title": "Live Session Stage",
+      "category": "Film Stage",
+      "hourlyRate": 140,
+      "rating": 4.9,
+      "location": "Downtown Atlanta, GA",
+      "securityDeposit": 350,
+      "maxCapacity": 25,
+      "overview": "A performance-ready stage for live sessions, music videos, interviews and branded productions.",
+      "imageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Stage Lighting",
+          "icon": "◻"
+        },
+        {
+          "name": "PA System",
+          "icon": "💡"
+        },
+        {
+          "name": "Camera Platforms",
+          "icon": "🔊"
+        },
+        {
+          "name": "Dressing Room",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "James Carter",
+        "email": "james@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=22"
+      },
+      "featured": false
+    },
+    {
+      "_id": "14",
+      "slug": "interview-podcast-studio",
+      "title": "Interview Podcast Studio",
+      "category": "Podcast Lounge",
+      "hourlyRate": 55,
+      "rating": 4.7,
+      "location": "Capitol Hill, Seattle, WA",
+      "securityDeposit": 120,
+      "maxCapacity": 5,
+      "overview": "A two-to-four person interview setup with clean acoustics, multi-camera framing and a relaxed atmosphere.",
+      "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "4K Cameras",
+          "icon": "◻"
+        },
+        {
+          "name": "Podcast Mics",
+          "icon": "💡"
+        },
+        {
+          "name": "Audio Interface",
+          "icon": "🔊"
+        },
+        {
+          "name": "Acoustic Treatment",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Lily Adams",
+        "email": "lily@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=23"
+      },
+      "featured": false
+    },
+    {
+      "_id": "15",
+      "slug": "electronic-music-lab",
+      "title": "Electronic Music Lab",
+      "category": "Music Suite",
+      "hourlyRate": 70,
+      "rating": 4.8,
+      "location": "Wynwood, Miami, FL",
+      "securityDeposit": 170,
+      "maxCapacity": 6,
+      "overview": "A production-focused room for electronic music, sound design and mixing with a curated hardware setup.",
+      "imageUrl": "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Synthesizers",
+          "icon": "◻"
+        },
+        {
+          "name": "MIDI Keyboard",
+          "icon": "💡"
+        },
+        {
+          "name": "Studio Monitors",
+          "icon": "🔊"
+        },
+        {
+          "name": "MIDI Controller",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Leo Martinez",
+        "email": "leo@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=24"
+      },
+      "featured": false
+    },
+    {
+      "_id": "16",
+      "slug": "sunlit-content-studio",
+      "title": "Sunlit Content Studio",
+      "category": "Photo Studio",
+      "hourlyRate": 48,
+      "rating": 4.6,
+      "location": "North Park, San Diego, CA",
+      "securityDeposit": 110,
+      "maxCapacity": 9,
+      "overview": "A relaxed daylight studio for social campaigns, creator portraits, small products and short-form video.",
+      "imageUrl": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Window Light",
+          "icon": "◻"
+        },
+        {
+          "name": "Seamless Backdrop",
+          "icon": "💡"
+        },
+        {
+          "name": "Tripod",
+          "icon": "🔊"
+        },
+        {
+          "name": "Reflectors",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Harper Scott",
+        "email": "harper@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=25"
+      },
+      "featured": false
+    },
+    {
+      "_id": "17",
+      "slug": "black-box-production-room",
+      "title": "Black Box Production Room",
+      "category": "Film Stage",
+      "hourlyRate": 95,
+      "rating": 4.8,
+      "location": "Central Phoenix, AZ",
+      "securityDeposit": 240,
+      "maxCapacity": 20,
+      "overview": "A controllable black-box space for interviews, tabletop productions, dramatic lighting and set builds.",
+      "imageUrl": "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Blackout Curtains",
+          "icon": "◻"
+        },
+        {
+          "name": "Rigging Points",
+          "icon": "💡"
+        },
+        {
+          "name": "LED Panels",
+          "icon": "🔊"
+        },
+        {
+          "name": "Control Room",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Benjamin Hall",
+        "email": "ben@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=26"
+      },
+      "featured": false
+    },
+    {
+      "_id": "18",
+      "slug": "voiceover-and-audio-suite",
+      "title": "Voiceover & Audio Suite",
+      "category": "Podcast Lounge",
+      "hourlyRate": 38,
+      "rating": 4.9,
+      "location": "Old Town, Portland, OR",
+      "securityDeposit": 90,
+      "maxCapacity": 3,
+      "overview": "A quiet voiceover suite for narration, audiobooks, voice acting and clean remote recording.",
+      "imageUrl": "https://images.unsplash.com/photo-1593078166033-9b3c4b2b2a8f?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1593078166033-9b3c4b2b2a8f?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Isolation Booth",
+          "icon": "◻"
+        },
+        {
+          "name": "Condenser Mic",
+          "icon": "💡"
+        },
+        {
+          "name": "Pop Filter",
+          "icon": "🔊"
+        },
+        {
+          "name": "Headphones",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Zoe Rivera",
+        "email": "zoe@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=27"
+      },
+      "featured": false
+    },
+    {
+      "_id": "19",
+      "slug": "rehearsal-room-east",
+      "title": "Rehearsal Room East",
+      "category": "Music Suite",
+      "hourlyRate": 52,
+      "rating": 4.7,
+      "location": "Logan Square, Chicago, IL",
+      "securityDeposit": 125,
+      "maxCapacity": 12,
+      "overview": "A practical rehearsal room with a dependable instrument setup for bands preparing for shows and sessions.",
+      "imageUrl": "https://images.unsplash.com/photo-1524363-8d3e6c2f7b7d?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1524363-8d3e6c2f7b7d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Drum Kit",
+          "icon": "◻"
+        },
+        {
+          "name": "Bass Amp",
+          "icon": "💡"
+        },
+        {
+          "name": "Guitar Amp",
+          "icon": "🔊"
+        },
+        {
+          "name": "PA System",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Mason Lee",
+        "email": "mason@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=28"
+      },
+      "featured": false
+    },
+    {
+      "_id": "20",
+      "slug": "maker-and-art-workshop",
+      "title": "Maker & Art Workshop",
+      "category": "Workshop",
+      "hourlyRate": 45,
+      "rating": 4.8,
+      "location": "Jersey City, NJ",
+      "securityDeposit": 140,
+      "maxCapacity": 16,
+      "overview": "A bright maker space for art workshops, small group projects, craft sessions and creative learning.",
+      "imageUrl": "https://images.unsplash.com/photo-1455390582262-044c0082fd3e?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1455390582262-044c0082fd3e?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Work Benches",
+          "icon": "◻"
+        },
+        {
+          "name": "Storage Shelves",
+          "icon": "💡"
+        },
+        {
+          "name": "Projector",
+          "icon": "🔊"
+        },
+        {
+          "name": "Wash Station",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Ella Wilson",
+        "email": "ella@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=29"
+      },
+      "featured": false
+    },
+    {
+      "_id": "21",
+      "slug": "downtown-creator-suite",
+      "title": "Downtown Creator Suite",
+      "category": "Photo Studio",
+      "hourlyRate": 68,
+      "rating": 4.9,
+      "location": "Downtown Denver, CO",
+      "securityDeposit": 175,
+      "maxCapacity": 11,
+      "overview": "A versatile creator suite combining a clean photo area, a small video corner and a comfortable prep zone.",
+      "imageUrl": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
+      "images": [
+        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&q=80&w=1200",
+        "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&q=80&w=1200"
+      ],
+      "amenities": [
+        {
+          "name": "Photo Backdrops",
+          "icon": "◻"
+        },
+        {
+          "name": "Continuous Lights",
+          "icon": "💡"
+        },
+        {
+          "name": "Monitor",
+          "icon": "🔊"
+        },
+        {
+          "name": "Changing Area",
+          "icon": "📶"
+        }
+      ],
+      "host": {
+        "name": "Jack Thompson",
+        "email": "jack@studiospace.com",
+        "avatar": "https://i.pravatar.cc/200?img=30"
+      },
+      "featured": false
+    }
+  ]
+}

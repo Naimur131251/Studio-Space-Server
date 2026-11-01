@@ -33,6 +33,7 @@ const mongoClient = await connectToMongoDB();
 const db = mongoClient.db("studio-space");
 const studioCollection = db.collection("studios");
 const bookingCollection = db.collection("bookings");
+const slideCollection = db.collection("homeSlides");
 
 // JWKS একবার বাইরে ডিক্লেয়ার করা হলো (Best Practice)
 const JWKS = createRemoteJWKSet(
@@ -65,6 +66,76 @@ const verifyToken = async (req, res, next) => {
     });
   }
 };
+
+// 0. Get Home Slider
+app.get("/home", async (req, res) => {
+  try {
+    const slides = await slideCollection
+      .find({})
+      .sort({ position: 1 })
+      .toArray();
+
+    res.status(200).send({
+      success: true,
+      slides,
+    });
+  } catch (error) {
+    console.error("Home slider error:", error);
+
+    res.status(500).send({
+      message: "Failed to fetch home slides",
+    });
+  }
+});
+
+// Get All Studios
+app.get("/studios", async (req, res) => {
+  try {
+    const { category, search } = req.query;
+
+    const filter = {};
+
+    // Category filter
+    if (category && category !== "All") {
+      filter.category = category;
+    }
+
+    // Search filter
+    if (search) {
+      filter.$or = [
+        {
+          title: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+        {
+          location: {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      ];
+    }
+
+    const studios = await studioCollection
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    res.status(200).send({
+      success: true,
+      total: studios.length,
+      studios,
+    });
+  } catch (error) {
+    console.error("Fetch studios error:", error);
+
+    res.status(500).send({
+      message: "Failed to fetch studios",
+    });
+  }
+});
 
 // 1. Add Studio
 app.post("/add-studios", verifyToken, async (req, res) => {
@@ -182,10 +253,11 @@ app.post("/bookings", verifyToken, async (req, res) => {
 
     if (
       !studioId ||
+      !ObjectId.isValid(studioId) ||
       !bookingDate ||
       !timeSlot ||
-      !customerEmail ||
-      !Number.isFinite(Number(totalAmount))
+      !Number.isFinite(Number(totalAmount)) ||
+      Number(totalAmount) <= 0
     ) {
       return res.status(400).send({
         message: "Missing or invalid booking data",
