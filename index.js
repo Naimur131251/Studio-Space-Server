@@ -28,7 +28,32 @@ const studioCollection = db.collection("studios");
 const bookingCollection = db.collection("bookings");
 const slideCollection = db.collection("homeSlides");
 
-// JWKS একবার বাইরে ডিক্লেয়ার করা হলো (Best Practice)
+await bookingCollection.createIndex(
+  { activeSlotKey: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      activeSlotKey: { $type: "string" },
+    },
+  },
+);
+
+const parseTime = (value) => {
+  const match = value?.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+
+  if (!match) return null;
+
+  let hour = Number(match[1]);
+  const minute = Number(match[2]);
+  const period = match[3].toUpperCase();
+
+  if (period === "AM" && hour === 12) hour = 0;
+  if (period === "PM" && hour !== 12) hour += 12;
+
+  return hour * 60 + minute;
+};
+
+// JWKS initialization
 const JWKS = createRemoteJWKSet(
   new URL(`${process.env.CLIENT_URL}/api/auth/jwks`),
 );
@@ -37,11 +62,15 @@ const JWKS = createRemoteJWKSet(
 const verifyToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).send({ message: "Unauthorized access!" });
+    return res
+      .status(401)
+      .send({ message: "Unauthorized access - Token missing!" });
   }
   const token = authHeader.split(" ")[1];
   if (!token) {
-    return res.status(401).send({ message: "Unauthorized access!" });
+    return res
+      .status(401)
+      .send({ message: "Unauthorized access - Invalid header!" });
   }
 
   try {
@@ -49,13 +78,12 @@ const verifyToken = async (req, res, next) => {
       issuer: process.env.CLIENT_URL,
       audience: process.env.CLIENT_URL,
     });
-    req.user = payload; // ইউজারের তথ্য রিকোয়েস্টে সেভ রাখা হলো
+    req.user = payload;
     next();
   } catch (error) {
-    console.error("JWT ERROR:", error.code, error.message);
-
+    console.error("JWT VERIFY FAILED:", error.message);
     return res.status(401).send({
-      message: "Unauthorized access - Invalid token!",
+      message: `Unauthorized access - ${error.message}`,
     });
   }
 };
@@ -74,7 +102,6 @@ app.get("/home", async (req, res) => {
     });
   } catch (error) {
     console.error("Home slider error:", error);
-
     res.status(500).send({
       message: "Failed to fetch home slides",
     });
@@ -85,34 +112,20 @@ app.get("/home", async (req, res) => {
 app.get("/studios", async (req, res) => {
   try {
     const { category, search, featured, limit } = req.query;
-
     const filter = {};
 
-    // Category filter
     if (category && category !== "All") {
       filter.category = category;
     }
 
-    // Featured filter
     if (featured === "true") {
       filter.featured = true;
     }
 
-    // Search filter
     if (search) {
       filter.$or = [
-        {
-          title: {
-            $regex: search,
-            $options: "i",
-          },
-        },
-        {
-          location: {
-            $regex: search,
-            $options: "i",
-          },
-        },
+        { title: { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
       ];
     }
 
@@ -120,17 +133,14 @@ app.get("/studios", async (req, res) => {
       .find(filter)
       .sort({ rating: -1, createdAt: -1 });
 
-    // Limit filter
     if (limit) {
       const parsedLimit = Number(limit);
-
       if (Number.isInteger(parsedLimit) && parsedLimit > 0) {
         studiosQuery = studiosQuery.limit(parsedLimit);
       }
     }
 
     const studios = await studiosQuery.toArray();
-
     res.status(200).send({
       success: true,
       total: studios.length,
@@ -138,7 +148,6 @@ app.get("/studios", async (req, res) => {
     });
   } catch (error) {
     console.error("Fetch studios error:", error);
-
     res.status(500).send({
       message: "Failed to fetch studios",
     });
@@ -147,21 +156,13 @@ app.get("/studios", async (req, res) => {
 
 app.get("/studio-categories", async (req, res) => {
   try {
-    if (!studioCollection) {
-      throw new Error(
-        "Database collection 'categoryCollection' is not initialized",
-      );
-    }
-
     const categories = await studioCollection.find().toArray();
-
     res.status(200).json({
       success: true,
       categories: categories || [],
     });
   } catch (error) {
     console.error("Database Fetch Error:", error.message);
-
     res.status(500).json({
       success: false,
       message: "Failed to fetch categories",
@@ -173,26 +174,77 @@ app.get("/studio-categories", async (req, res) => {
 // 1. Add Studio
 app.post("/add-studios", verifyToken, async (req, res) => {
   try {
-    const studioData = req.body;
-    const result = await studioCollection.insertOne({
+    const email = req.user.email?.trim().toLowerCase();
+
+    if (!email) {
+      return res.status(401).send({
+        message: "Authenticated user email not found.",
+      });
+    }
+
+    const userId = req.user.sub || req.user.id || "";
+
+    const { ownerEmail, ownerId, host, hostName, hostEmail, ...studioData } =
+      req.body;
+
+    const newStudio = {
       ...studioData,
+
+      hourlyRate: Number(studioData.hourlyRate),
+      securityDeposit: Number(studioData.securityDeposit),
+      maxCapacity: Number(studioData.maxCapacity),
+
+      ownerId: String(userId),
+      ownerEmail: email,
+
+      host: {
+        name: req.user.name || email.split("@")[0],
+        email,
+        avatar: req.user.picture || req.user.image || "",
+      },
+
       createdAt: new Date(),
+    };
+
+    const result = await studioCollection.insertOne(newStudio);
+
+    res.status(201).send({
+      success: true,
+      message: "Studio added successfully!",
+      insertedId: result.insertedId,
     });
-    res.status(201).send(result);
   } catch (error) {
-    res.status(500).send({ message: "Failed to add studio" });
+    console.error("Add studio error:", error);
+
+    res.status(500).send({
+      message: "Failed to add studio",
+    });
   }
 });
 
-// 2. Get My Listings (User specific filter)
+// 2. Get My Listings (Secured: Users can only see their own listings)
 app.get("/my-listings", verifyToken, async (req, res) => {
   try {
-    const email = req.query.email;
-    const filter = email ? { ownerEmail: email } : {};
-    const result = await studioCollection.find(filter).toArray();
-    res.send(result);
+    const email = req.user.email?.trim().toLowerCase();
+
+    if (!email) {
+      return res.status(401).send({
+        message: "User email not found.",
+      });
+    }
+
+    const result = await studioCollection
+      .find({ ownerEmail: email })
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    res.status(200).send(result);
   } catch (error) {
-    res.status(500).send({ message: "Failed to fetch listings" });
+    console.error("My listings error:", error);
+
+    res.status(500).send({
+      message: "Failed to fetch listings",
+    });
   }
 });
 
@@ -212,12 +264,23 @@ app.get("/studios/:id", async (req, res) => {
   }
 });
 
-// 4. Update Studio
+// 4. Update Studio (Secured with Owner Verification)
 app.patch("/studios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id))
       return res.status(400).send({ message: "Invalid studio ID" });
+
+    // প্রথমে চেক করা হচ্ছে স্টুডিওটি কার
+    const studio = await studioCollection.findOne({ _id: new ObjectId(id) });
+    if (!studio) return res.status(404).send({ message: "Studio not found" });
+
+    // Security Check: শুধুমাত্র ওনার নিজেই আপডেট করতে পারবেন
+    if (studio.ownerEmail !== req.user.email) {
+      return res
+        .status(403)
+        .send({ message: "Forbidden! You are not the owner of this studio." });
+    }
 
     const { amenities, ...data } = req.body;
 
@@ -240,29 +303,31 @@ app.patch("/studios/:id", verifyToken, async (req, res) => {
       },
     );
 
-    if (!result.matchedCount)
-      return res.status(404).send({ message: "Studio not found" });
-
     res.send({ message: "Studio updated successfully!" });
   } catch (error) {
     res.status(500).send({ message: "Failed to update studio" });
   }
 });
 
-// 5. Delete Studio
+// 5. Delete Studio (Secured with Owner Verification)
 app.delete("/studios/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     if (!ObjectId.isValid(id))
       return res.status(400).send({ message: "Invalid studio ID" });
 
-    const result = await studioCollection.deleteOne({
-      _id: new ObjectId(id),
-    });
+    // প্রথমে চেক করা হচ্ছে স্টুডিওটি কার
+    const studio = await studioCollection.findOne({ _id: new ObjectId(id) });
+    if (!studio) return res.status(404).send({ message: "Studio not found" });
 
-    if (!result.deletedCount)
-      return res.status(404).send({ message: "Studio not found" });
+    // Security Check: শুধুমাত্র ওনার নিজেই ডিলিট করতে পারবেন
+    if (studio.ownerEmail !== req.user.email) {
+      return res
+        .status(403)
+        .send({ message: "Forbidden! You are not the owner of this studio." });
+    }
 
+    await studioCollection.deleteOne({ _id: new ObjectId(id) });
     res.send({ message: "Studio deleted successfully!" });
   } catch (error) {
     res.status(500).send({ message: "Failed to delete studio" });
@@ -270,54 +335,114 @@ app.delete("/studios/:id", verifyToken, async (req, res) => {
 });
 
 // 6. Create Booking (With Double-Booking Prevention)
+// 6. Create Booking (With Double-Booking Prevention)
 app.post("/bookings", verifyToken, async (req, res) => {
   try {
-    const {
-      studioId,
-      studioTitle,
-      category,
-      bookingDate,
-      timeSlot,
-      totalAmount,
-    } = req.body;
+    const email = req.user.email?.trim().toLowerCase();
+    const userId = String(req.user.sub || req.user.id || "");
 
-    // Get email from verified JWT
-    const customerEmail = req.user.email;
+    const { studioId, bookingDate, startTime, hours } = req.body;
+
+    if (!email || !studioId || !ObjectId.isValid(studioId)) {
+      return res.status(400).send({
+        success: false,
+        message: "Invalid booking information.",
+      });
+    }
+
+    const duration = Number(hours);
 
     if (
-      !studioId ||
-      !ObjectId.isValid(studioId) ||
       !bookingDate ||
-      !timeSlot ||
-      !Number.isFinite(Number(totalAmount)) ||
-      Number(totalAmount) <= 0
+      !/^([01]\d|2[0-3]):[0-5]\d$/.test(startTime || "") ||
+      !Number.isInteger(duration) ||
+      duration < 1 ||
+      duration > 12
     ) {
       return res.status(400).send({
-        message: "Missing or invalid booking data",
+        success: false,
+        message: "Invalid date, time or duration.",
       });
     }
 
-    const existingBooking = await bookingCollection.findOne({
-      studioId,
-      bookingDate,
-      timeSlot,
-      status: { $in: ["Pending", "Confirmed"] },
+    const [hour, minute] = startTime.split(":").map(Number);
+    const startMinutes = hour * 60 + minute;
+    const endMinutes = startMinutes + duration * 60;
+
+    // if (endMinutes > 1440) {
+    //   return res.status(400).send({
+    //     message: "Booking cannot extend beyond midnight.",
+    //   });
+    // }
+
+    const studio = await studioCollection.findOne({
+      _id: new ObjectId(studioId),
     });
 
-    if (existingBooking) {
-      return res.status(400).send({
-        message: "This studio slot is already booked or pending!",
+    if (!studio) {
+      return res.status(404).send({
+        success: false,
+        message: "Studio not found.",
       });
     }
+
+    // Check existing overlapping bookings for the same studio and date
+    const existingBookings = await bookingCollection
+      .find({
+        studioId,
+        bookingDate,
+        status: { $in: ["Pending", "Confirmed"] },
+      })
+      .toArray();
+
+    const hasConflict = existingBookings.some((booking) => {
+      let oldStart = booking.startMinutes;
+      let oldEnd = booking.endMinutes;
+
+      if (!Number.isFinite(oldStart) || !Number.isFinite(oldEnd)) {
+        const [start, end] = (booking.timeSlot || "").split(" - ");
+        oldStart = parseTime(start);
+        oldEnd = parseTime(end);
+      }
+
+      if (oldStart === null || oldEnd === null) return false;
+
+      return oldStart < endMinutes && oldEnd > startMinutes;
+    });
+
+    if (hasConflict) {
+      return res.status(409).send({
+        success: false,
+        code: "SLOT_ALREADY_BOOKED",
+        message:
+          "Ei time-e already ekjon booking kore rekheche! Porer kono time-e booking korun.",
+      });
+    }
+
+    const formatTime = (minutes) => {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      const period = h >= 12 ? "PM" : "AM";
+      const formattedHour = h % 12 || 12;
+
+      return `${String(formattedHour).padStart(2, "0")}:${String(m).padStart(2, "0")} ${period}`;
+    };
+
+    const timeSlot = `${formatTime(startMinutes)} - ${formatTime(endMinutes)}`;
 
     const booking = {
       studioId,
-      studioTitle,
-      category,
+      studioTitle: studio.title,
+      category: studio.category,
+      customerId: userId,
+      customerEmail: email, // User er email save hocche jate shudhu tar tai dekha jay
       bookingDate,
+      startTime,
+      startMinutes,
+      endMinutes,
       timeSlot,
-      totalAmount: Number(totalAmount),
-      customerEmail,
+      totalAmount: Number(studio.hourlyRate) * duration,
+      activeSlotKey: `${studioId}_${bookingDate}_${startMinutes}`,
       status: "Pending",
       createdAt: new Date(),
     };
@@ -325,76 +450,98 @@ app.post("/bookings", verifyToken, async (req, res) => {
     const result = await bookingCollection.insertOne(booking);
 
     res.status(201).send({
+      success: true,
       message: "Booking created successfully!",
       insertedId: result.insertedId,
     });
   } catch (error) {
-    console.error("Create booking error:", error);
+    if (error.code === 11000) {
+      return res.status(409).send({
+        success: false,
+        code: "SLOT_ALREADY_BOOKED",
+        message:
+          "Ei time-e already ekjon booking kore rekheche! Porer kono time-e booking korun.",
+      });
+    }
 
+    console.error("Create booking error:", error);
     res.status(500).send({
-      message: "Failed to create booking",
+      success: false,
+      message: "Failed to create booking.",
     });
   }
 });
 
-// 7. Get My Bookings (Secured with verifyToken)
+// 7. Get My Bookings
 app.get("/my-bookings", verifyToken, async (req, res) => {
   try {
-    const email = req.user.email;
+    const email = req.user.email?.trim().toLowerCase();
 
-    console.log("Logged in user:", email);
+    if (!email) {
+      return res.status(401).send({
+        message: "User email not found.",
+      });
+    }
 
     const bookings = await bookingCollection
       .find({ customerEmail: email })
       .sort({ createdAt: -1 })
       .toArray();
 
-    console.log("Found bookings:", bookings.length);
-
     res.status(200).send(bookings);
   } catch (error) {
     console.error("My bookings error:", error);
 
     res.status(500).send({
-      message: "Failed to fetch bookings",
+      message: "Failed to fetch bookings.",
     });
   }
 });
 
-// 8. Cancel Booking (Secured with verifyToken)
+// 8. Cancel Booking (Secured: Only the person who booked can cancel)
 app.patch("/bookings/:id/cancel", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-
     if (!ObjectId.isValid(id))
       return res.status(400).send({ message: "Invalid booking ID" });
 
+    // Security Check: চেক করা হচ্ছে এই বুকিংটি লগইন করা ইউজারের কি না
     const result = await bookingCollection.updateOne(
-      { _id: new ObjectId(id), status: "Pending" },
-      { $set: { status: "Cancelled", updatedAt: new Date() } },
+      {
+        _id: new ObjectId(id),
+        customerEmail: req.user.email.trim().toLowerCase(),
+        status: "Pending",
+      },
+      {
+        $set: {
+          status: "Cancelled",
+          updatedAt: new Date(),
+        },
+        $unset: {
+          activeSlotKey: "",
+        },
+      },
     );
 
     if (!result.matchedCount) {
       return res.status(400).send({
-        message: "Booking not found or cannot be cancelled",
+        message:
+          "Booking not found, already cancelled, or you don't have permission.",
       });
     }
-
     res.send({ message: "Booking cancelled successfully!" });
   } catch (error) {
     console.error("Cancel booking error:", error);
     res.status(500).send({ message: "Failed to cancel booking" });
   }
 });
-
 app.get("/", (req, res) => {
   res.send({
     message: "StudioSpace Server is running successfully!",
   });
 });
-
 app.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
 });
 
-export default app
+export default app;
