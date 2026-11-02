@@ -88,6 +88,17 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
+// Auth JWT Read Only Host
+app.get("/auth/me", verifyToken, (req, res) => {
+  res.status(200).json({
+    user: {
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user.email,
+    },
+  });
+});
+
 // 0. Get Home Slider
 app.get("/home", async (req, res) => {
   try {
