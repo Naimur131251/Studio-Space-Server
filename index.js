@@ -147,8 +147,13 @@ app.get("/studios", async (req, res) => {
     if (limit) {
       const parsedLimit = Number(limit);
       if (Number.isInteger(parsedLimit) && parsedLimit > 0) {
-        studiosQuery = studiosQuery.limit(parsedLimit);
+        const finalLimit =
+          featured === "true" ? Math.min(parsedLimit, 6) : parsedLimit;
+
+        studiosQuery = studiosQuery.limit(finalLimit);
       }
+    } else if (featured === "true") {
+      studiosQuery = studiosQuery.limit(6);
     }
 
     const studios = await studiosQuery.toArray();
@@ -159,7 +164,9 @@ app.get("/studios", async (req, res) => {
     });
   } catch (error) {
     console.error("Fetch studios error:", error);
+
     res.status(500).send({
+      success: false,
       message: "Failed to fetch studios",
     });
   }
@@ -345,7 +352,6 @@ app.delete("/studios/:id", verifyToken, async (req, res) => {
   }
 });
 
-// 6. Create Booking (With Double-Booking Prevention)
 // 6. Create Booking (With Double-Booking Prevention)
 app.post("/bookings", verifyToken, async (req, res) => {
   try {
